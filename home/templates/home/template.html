@@ -1,0 +1,25 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <div id="navigation">
+            {% if user.is_authenticated %}
+            <ul>
+                <li><a href="/home/posts">Posts</a></li>
+                <li><a href="/home/library">Library</a></li>
+                <li><a href="/home/playlists">Playlists</a></li>
+                <li><a href="/home/users">Playlists</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+            {% else %}
+            <ul>
+                <li><a href="/login">Login</a></li>
+            </ul>
+            {% endif %}
+        </div>
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

@@ -25,16 +25,16 @@ class Profile(models.Model):
     #avatar = models.ImageField()
     #status = models.TextField()
 
-    @staticmethod
-    @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
-        if created:
-            Profile.objects.create(user=instance)
 
-    @staticmethod
-    @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
-        instance.profile.save()
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
 
 
 class Tag(models.Model):
@@ -49,7 +49,9 @@ class Song(models.Model):
     title = models.CharField(max_length=60)
     artist = models.CharField(max_length=60)
     remixer = models.CharField(max_length=60)
+
     url = models.CharField(max_length=120)
+    file = models.FileField(upload_to="uploads/")
 
     genre = models.CharField(max_length=30)
     tags = models.ManyToManyField(Tag)
@@ -67,5 +69,19 @@ class Playlist(models.Model):
     songs = models.ManyToManyField(Song)
 
     collaboration = models.IntegerField(choices=COLLABORATION_LEVELS, default=0)
-    collaborators = models.ManyToManyField(Profile, related_name="playlists_shared")
+    collaborators = models.ManyToManyField(Profile)
+    visibility = models.IntegerField(choices=VISIBILITY_LEVELS, default=0)
+
+
+class Post(models.Model):
+    """A blog type post."""
+
+    title = models.CharField(max_length=60)
+    test = models.TextField()
+    songs = models.ManyToManyField(Song)
+    playlists = models.ManyToManyField(Playlist)
+    author = models.ForeignKey(User)
+
+    collaboration = models.IntegerField(choices=COLLABORATION_LEVELS, default=0)
+    collaborators = models.ManyToManyField(Profile)
     visibility = models.IntegerField(choices=VISIBILITY_LEVELS, default=0)
