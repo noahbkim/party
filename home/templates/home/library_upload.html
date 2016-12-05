@@ -1,0 +1,12 @@
+{% extends "home/template.html" %}
+
+{% block content %}
+
+<h1>Upload Song</h1>
+<form method="post" action="/home/library/upload">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit">
+</form>
+
+{% endblock %}

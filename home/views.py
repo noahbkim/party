@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
 from . import models
+from . import forms
 
 
 def index(request):
@@ -69,6 +70,20 @@ def library(request):
         songs = models.Song.objects.all()
 
     return render(request, "home/library.html", {"songs": songs})
+
+
+@login_required()
+def library_upload(request):
+
+    if request.method == "POST":
+        form = forms.SongForm(request.POST)
+        song = form.save(commit=False)
+        song.uploader = request.user
+        song.save()
+        return redirect("/home/library")
+
+    form = forms.SongForm()
+    return render(request, "home/library_upload.html", {"form": form})
 
 
 @login_required()
