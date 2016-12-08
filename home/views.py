@@ -75,15 +75,35 @@ def library(request):
 @login_required()
 def library_upload(request):
 
+    if "edit" in request.GET:
+        return library_edit(request)
+
     if request.method == "POST":
         form = forms.SongForm(request.POST)
         song = form.save(commit=False)
-        song.uploader = request.user
+        song.uploader = request.user.profile
         song.save()
         return redirect("/home/library")
 
     form = forms.SongForm()
     return render(request, "home/library_upload.html", {"form": form})
+
+
+def library_edit(request):
+
+    if not request.GET["edit"].isnumeric():
+        return redirect("/home/library")
+
+    id = int(request.GET["edit"])
+    existing = models.Song.objects.filter(id=id).first()
+
+    if request.method == "POST":
+        form = forms.SongForm(request.POST, instance=existing)
+        form.save()
+        return redirect("/home/library")
+
+    form = forms.SongForm(instance=existing)
+    return render(request, "home/library_upload.html", {"form": form, "edit": "?edit=" + str(id)})
 
 
 @login_required()

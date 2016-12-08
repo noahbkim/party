@@ -6,11 +6,21 @@
 
 <a href="/home/library/upload">Upload</a>
 
-<table>
+<table id="library">
+    <thead>
+        <td>Title</td>
+        <td>Artist</td>
+        <td>Genre</td>
+        <td>Uploader</td>
+    </thead>
+
     {% for song in songs %}
     <tr>
-        <td>{{ song.title }}</td>
+        <td><a href="{{ song.url }}" target="_blank">{{ song.title }}</a></td>
         <td>{{ song.artist }}</td>
+        <td>{{ song.genre }}</td>
+        <td>{{ song.uploader.user.username }}</td>
+        <td><a href="/home/library/upload/?edit={{ song.id }}"><i class="fa fa-cog" aria-hidden="true"></i></a></td>
     </tr>
     {% endfor %}
 </table>

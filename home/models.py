@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+import os
+import binascii
+
 
 COLLABORATION_LEVELS = (
     (0, "private"),
@@ -42,13 +45,13 @@ class Song(models.Model):
 
     title = models.CharField(max_length=60)
     artist = models.CharField(max_length=60)
-    remixer = models.CharField(max_length=60)
+    remixer = models.CharField(max_length=60, blank=True)
 
-    url = models.CharField(max_length=120)
+    url = models.CharField(max_length=120, blank=True)
     file = models.FileField(upload_to="uploads/", blank=True)
 
-    genre = models.CharField(max_length=30)
-    tags = models.CharField(max_length=120)
+    genre = models.CharField(max_length=30, blank=True)
+    tags = models.CharField(max_length=120, blank=True)
 
     uploader = models.ForeignKey(Profile, related_name="uploads")
     upload_time = models.DateTimeField(auto_now_add=True)
@@ -69,10 +72,26 @@ class Playlist(models.Model):
     title = models.CharField(max_length=60)
     creator = models.ForeignKey(Profile, related_name="playlists")
     songs = models.ManyToManyField(Song)
+    slug = models.CharField(max_length=16, unique=True)
 
     collaboration = models.IntegerField(choices=COLLABORATION_LEVELS, default=0)
     collaborators = models.ManyToManyField(Profile)
     visibility = models.IntegerField(choices=VISIBILITY_LEVELS, default=0)
+
+    def __init__(self, *args, **kwargs):
+        """Initialize a new playlist."""
+
+        super().__init__(*args, **kwargs)
+        slug = Playlist.generate_slug()
+        while Playlist.objects.filter(slug=slug).count() > 0:
+            slug = Playlist.generate_slug()
+        self.slug = slug
+
+    @staticmethod
+    def generate_slug():
+        """Generate a random playlist slug."""
+
+        return binascii.hexlify(os.urandom(16))
 
 
 class Post(models.Model):

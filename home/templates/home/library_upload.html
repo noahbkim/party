@@ -3,7 +3,7 @@
 {% block content %}
 
 <h1>Library Upload</h1>
-<form method="post" action="/home/library/upload/">
+<form method="post" action="/home/library/upload/{{ edit }}">
     {% csrf_token %}
     <table>
         {% for field in form %}
