@@ -1,12 +1,23 @@
-{% extends "home/template.html" %}
+{% extends "home/core/base.html" %}
 
 {% block content %}
 
-<h1>Upload Song</h1>
-<form method="post" action="/home/library/upload">
+<h1>Library Upload</h1>
+<form method="post" action="/home/library/upload/">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit">
+    <table>
+        {% for field in form %}
+            <tr>
+                {{ field.errors }}
+                <td>{{ field.label_tag }}</td>
+                <td>{{ field }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td><input type="submit"></td>
+        </tr>
+    </table>
 </form>
 
 {% endblock %}

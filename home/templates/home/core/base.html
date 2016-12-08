@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <title>Todo</title>
+        {% include "home/core/bootstrap.html" %}
+        {% if sidebar != False %}
+            <link rel="stylesheet" type="text/css" href="/static/css/sidebar.css"/>
+            <script type="text/javascript" src="/static/js/sidebar.js"></script>
+        {% endif %}
+        <link rel="stylesheet" type="text/css" href="/static/css/master.css"/>
+    </head>
+    <body>
+        {% if sidebar != False %}
+            {% include "home/core/navigation.html" %}
+        {% endif %}
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

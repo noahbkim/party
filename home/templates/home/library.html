@@ -1,10 +1,18 @@
+{% extends "home/core/base.html" %}
+
+{% block content %}
+
 <h1>Library</h1>
 
-<tabl>
+<a href="/home/library/upload">Upload</a>
+
+<table>
     {% for song in songs %}
     <tr>
         <td>{{ song.title }}</td>
         <td>{{ song.artist }}</td>
     </tr>
     {% endfor %}
-</tabl>
+</table>
+
+{% endblock %}

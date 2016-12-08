@@ -37,12 +37,6 @@ def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 
-class Tag(models.Model):
-    """A concise description of a song."""
-
-    name = models.CharField(max_length=20)
-
-
 class Song(models.Model):
     """A song upload container."""
 
@@ -51,14 +45,22 @@ class Song(models.Model):
     remixer = models.CharField(max_length=60)
 
     url = models.CharField(max_length=120)
-    file = models.FileField(upload_to="uploads/")
+    file = models.FileField(upload_to="uploads/", blank=True)
 
     genre = models.CharField(max_length=30)
-    tags = models.ManyToManyField(Tag)
+    tags = models.CharField(max_length=120)
 
     uploader = models.ForeignKey(Profile, related_name="uploads")
     upload_time = models.DateTimeField(auto_now_add=True)
     modify_time = models.DateTimeField(auto_now=True)
+
+    def upload_path(self):
+        """Generate an upload path."""
+
+        name = "{} - {}".format(self.artist, self.title)
+        if self.remixer:
+            name += " ({} remix)".format(self.remixer)
+        return name
 
 
 class Playlist(models.Model):

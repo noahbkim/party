@@ -1,0 +1,45 @@
+#content {
+    width: 800px;
+    margin: 4em auto;
+}
+
+h1 {
+    margin-bottom: 0.5em;
+    padding-bottom: 6px;
+}
+
+form {
+    width: 100%;
+    display: block;
+}
+
+form label {
+    text-align: right;
+    padding-top: 4px;
+}
+
+form table {
+    width: 100%;
+    table-layout: auto;
+}
+
+form table td:first-of-type {
+    padding-left: 20px;
+    width: 1%;
+}
+
+form label {
+    text-align: right;
+    width: 100%;
+    padding-right: 10px;
+}
+
+form input {
+    width: 100%;
+}
+
+form input[type="submit"] {
+    display: block;
+    width: 100px;
+    margin-top: 1em;
+}
